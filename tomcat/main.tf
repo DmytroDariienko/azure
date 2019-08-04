@@ -88,6 +88,10 @@ resource "azurerm_app_service" "tomcat_apps" {
 	java_container         = "Tomcat"
 	java_container_version = "9.0"
   }
+  
+  app_settings = {
+     "SCM_TARGET_PATH" = "D:\home\site\wwwroot\webapps\ROOT"
+  }
 }
 
 resource "azurerm_traffic_manager_profile" "tomcat_trafic_manager" {
