@@ -17,3 +17,13 @@ variable "app_names" {
   type    = list(string)
   default = ["tomcat-app-us", "tomcat-app-eu"]
 }
+
+variable "operators" {
+    type = "list"
+    default = ["GreaterThan", "LessThan"]
+}
+
+variable "thresholds" {
+    type = "list"
+    default = ["70", "20"]
+}

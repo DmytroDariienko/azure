@@ -35,6 +35,8 @@ resource "azurerm_monitor_autoscale_setting" "autoscale" {
     }
 
     rule {
+	  rule_count = length(var.operators)
+	  
       metric_trigger {
         metric_name         = "CpuPercentage"
 		metric_resource_id  = "${azurerm_app_service_plan.tomcat_plans[count.index].id}"
@@ -42,32 +44,12 @@ resource "azurerm_monitor_autoscale_setting" "autoscale" {
         statistic           = "Average"
         time_window         = "PT5M"
         time_aggregation    = "Average"
-        operator            = "GreaterThan"
-        threshold           = 70
+        operator            = var.operators[rule_count.index]
+        threshold           = var.thresholds[rule_count.index]
       }
 
       scale_action {
         direction = "Increase"
-        type      = "ChangeCount"
-        value     = "1"
-        cooldown  = "PT1M"
-      }
-    }
-
-    rule {
-      metric_trigger {
-        metric_name         = "CpuPercentage"
-		metric_resource_id  = "${azurerm_app_service_plan.tomcat_plans[count.index].id}"
-        time_grain          = "PT1M"
-        statistic           = "Average"
-        time_window         = "PT5M"
-        time_aggregation    = "Average"
-        operator            = "LessThan"
-        threshold           = 20
-      }
-
-      scale_action {
-        direction = "Decrease"
         type      = "ChangeCount"
         value     = "1"
         cooldown  = "PT1M"
