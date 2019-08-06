@@ -90,7 +90,7 @@ resource "azurerm_app_service" "tomcat_apps" {
   }
   
   app_settings = {
-     "SCM_TARGET_PATH" = "D:\home\site\wwwroot\webapps\ROOT"
+     "SCM_TARGET_PATH" = "D:""\""home""\""site""\""wwwroot""\""webapps""\""ROOT"
   }
 }
 
