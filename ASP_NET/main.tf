@@ -29,7 +29,7 @@ resource "azurerm_monitor_autoscale_setting" "autoscale" {
     capacity {
       default = 1
       minimum = 1
-      maximum = 10
+      maximum = 2
     }
 
     rule {
