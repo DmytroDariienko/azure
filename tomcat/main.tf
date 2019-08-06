@@ -20,7 +20,7 @@ resource "azurerm_app_service_plan" "tomcat_plans" {
 
 resource "azurerm_monitor_autoscale_setting" "autoscale" {
   count               = length(var.plan_names)
-  name                = "tomcat-app-autoscaleSetting"
+  name                = "tomcat-app"[count.index]"-autoscaleSetting"
   resource_group_name = "${azurerm_resource_group.tomcat.name}"
   location            = var.lacations[count.index]
   target_resource_id  = "${azurerm_app_service_plan.tomcat_plans[count.index].id}"
@@ -30,8 +30,8 @@ resource "azurerm_monitor_autoscale_setting" "autoscale" {
 
     capacity {
       default = 1
-      minimum = 1
-      maximum = 10
+      minimum = 2
+      maximum = 1
     }
 
     rule {
@@ -67,7 +67,7 @@ resource "azurerm_monitor_autoscale_setting" "autoscale" {
       }
 
       scale_action {
-        direction = "Increase"
+        direction = "Decrease"
         type      = "ChangeCount"
         value     = "1"
         cooldown  = "PT1M"
