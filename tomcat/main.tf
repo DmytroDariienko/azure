@@ -20,7 +20,7 @@ resource "azurerm_app_service_plan" "tomcat_plans" {
 
 resource "azurerm_monitor_autoscale_setting" "autoscale" {
   count               = length(var.plan_names)
-  name                = "tomcat-app"[count.index]"-autoscaleSetting"
+  name                = "tomcat-app${count.index]}-autoscaleSetting"
   resource_group_name = "${azurerm_resource_group.tomcat.name}"
   location            = var.lacations[count.index]
   target_resource_id  = "${azurerm_app_service_plan.tomcat_plans[count.index].id}"
@@ -89,9 +89,9 @@ resource "azurerm_app_service" "tomcat_apps" {
 	java_container_version = "9.0"
   }
   
-  app_settings = {
-     "SCM_TARGET_PATH" = "D:""\""home""\""site""\""wwwroot""\""webapps""\""ROOT"
-  }
+  # app_settings = {
+  #    "SCM_TARGET_PATH" = "D:\home\site\wwwroot\webapps\ROOT"
+  # }
 }
 
 resource "azurerm_traffic_manager_profile" "tomcat_trafic_manager" {
