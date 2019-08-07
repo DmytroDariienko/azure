@@ -85,13 +85,73 @@ resource "azurerm_app_service" "tomcat_apps" {
 
   site_config {
     java_version           = 11
-	java_container         = "Tomcat"
-	java_container_version = "9.0"
+        java_container         = "Tomcat"
+        java_container_version = "9.0"
   }
-  
-  app_settings = {
-    "SCM_TARGET_PATH" = "D:\\home\\site\\wwwroot\\webapps\\ROOT"
+
+resource "azurerm_template_deployment" "tomcat_apps" {
+  count               = length(var.app_names)
+  name                = var.app_names[count.index]
+  resource_group_name = "${azurerm_resource_group.tomcat.name}"
+  deployment_mode     = "Incremental"
+
+  template_body = <<DEPLOY
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+        "webAppName": {
+            "type": "String"
+        },
+       "webAppSlotName": {
+            "type": "String"
+        },
+        "virtualApplications":{
+        "type": "array",
+        "defaultValue":[
+            {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot\\webapps\\ROOT",
+            "preloadEnabled": false,
+            "virtualDirectories": null
+            }
+        ]
+        }
+  },
+  "variables": {},
+  "resources": [
+      {
+          "type": "Microsoft.Web/sites/config",
+          "name": "[concat(parameters('webAppName'), '/web')]",
+          "apiVersion": "2016-08-01",
+          "properties": {
+              "virtualApplications": "[parameters('virtualApplications')]"
+          },
+          "dependsOn": []
+      },
+      {
+          "type": "Microsoft.Web/sites/slots/config",
+          "name": "[concat(parameters('webAppName'),'/', parameters('webAppSlotName'),'/web')]",
+          "apiVersion": "2016-08-01",
+          "properties": {
+              "virtualApplications": "[parameters('virtualApplications')]"
+          },
+          "dependsOn": []
+      }
+      
+  ]
+}
+DEPLOY
+
+  parameters {
+    "webAppName"          = "${azurerm_app_service.tomcat_apps[count.index].name}"
+    "webAppSlotName"      = "${azurerm_app_service_slot.tomcat_app_slots[count.index].name}"
   }
+
+  depends_on = [
+    "azurerm_app_service.tomcat_apps[count.index]",
+    "azurerm_app_service_slot.tomcat_app_slots[count.index]"
+  ]
 }
 
 resource "azurerm_traffic_manager_profile" "tomcat_trafic_manager" {
