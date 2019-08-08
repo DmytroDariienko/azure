@@ -9,7 +9,7 @@ resource "azurerm_resource_group" "tomcat" {
 resource "azurerm_app_service_plan" "tomcat_plans" {
   count               = length(var.plan_names)
   name                = var.plan_names[count.index]
-  location            = var.lacations[count.index]
+  location            = var.locations[count.index]
   resource_group_name = "${azurerm_resource_group.tomcat.name}"
 
   sku {
@@ -22,7 +22,7 @@ resource "azurerm_monitor_autoscale_setting" "autoscale" {
   count               = length(var.plan_names)
   name                = "${var.app_names[count.index]}-autoscaleSetting"
   resource_group_name = "${azurerm_resource_group.tomcat.name}"
-  location            = var.lacations[count.index]
+  location            = var.locations[count.index]
   target_resource_id  = "${azurerm_app_service_plan.tomcat_plans[count.index].id}"
 
   profile {
@@ -79,7 +79,7 @@ resource "azurerm_monitor_autoscale_setting" "autoscale" {
 resource "azurerm_app_service" "tomcat_apps" {
   count               = length(var.app_names)
   name                = var.app_names[count.index]
-  location            = var.lacations[count.index]
+  location            = var.locations[count.index]
   resource_group_name = "${azurerm_resource_group.tomcat.name}"
   app_service_plan_id = "${azurerm_app_service_plan.tomcat_plans[count.index].id}"
 
@@ -90,10 +90,10 @@ resource "azurerm_app_service" "tomcat_apps" {
   }
 }
 
-resource "azurerm_app_service_slot" "tomcat-app-slots" {
+resource "azurerm_app_service_slot" "tomcat_app_slots" {
   count               = length(var.app_names)
   name                = "${var.app_names[count.index]}-slot"
-  app_service_name    = "${azurerm_app_service.tomcat_apps[count.index].id}"
+  app_service_name    = "${azurerm_app_service.tomcat_apps[count.index].name}"
   location            = "${azurerm_app_service.tomcat_apps[count.index].location}"
   resource_group_name = "${azurerm_resource_group.tomcat.name}"
   app_service_plan_id = "${azurerm_app_service_plan.tomcat_plans[count.index].id}"
@@ -103,6 +103,73 @@ resource "azurerm_app_service_slot" "tomcat-app-slots" {
         java_container         = "Tomcat"
         java_container_version = "9.0"
   }
+}
+
+resource "azurerm_template_deployment" "tomcat_virtual_directory_tamplates" {
+  count               = length(var.app_names)
+  name                = "${var.app_names[count.index]}-virtual-directory"
+  resource_group_name = "${azurerm_resource_group.tomcat.name}"
+  deployment_mode     = "Incremental"
+
+  template_body = <<DEPLOY
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+        "webAppName": {
+            "type": "String"
+        },
+       "webAppSlotName": {
+            "type": "String"
+        },
+        "virtualApplications":{
+        "type": "array",
+        "defaultValue":[
+            {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot\\webapps\\ROOT",
+            "preloadEnabled": false,
+            "virtualDirectories": null
+            }
+        ]
+        }
+  },
+  "variables": {},
+  "resources": [
+      {
+          "type": "Microsoft.Web/sites/config",
+          "name": "[concat(parameters('webAppName'), '/web')]",
+          "apiVersion": "2016-08-01",
+          "properties": {
+              "virtualApplications": "[parameters('virtualApplications')]"
+          },
+          "dependsOn": []
+      },
+      {
+          "type": "Microsoft.Web/sites/slots/config",
+          "name": "[concat(parameters('webAppName'),'/', parameters('webAppSlotName'),'/web')]",
+          "apiVersion": "2016-08-01",
+          "properties": {
+              "virtualApplications": "[parameters('virtualApplications')]"
+          },
+          "dependsOn": []
+      }
+      
+  ]
+}
+DEPLOY
+
+  parameters = {
+    "webAppName"          = "${azurerm_app_service.tomcat_apps[count.index].name}"
+    "webAppSlotName"      = "${azurerm_app_service_slot.tomcat_app_slots[count.index].name}"
+
+    # We use the a baked default value; I have not tried the below jsonencode; mostly because it is not easy to read.
+  }
+
+  depends_on = [
+    "azurerm_app_service.tomcat_apps",
+    "azurerm_app_service_slot.tomcat_app_slots"
+  ]
 }
 
 resource "azurerm_traffic_manager_profile" "tomcat_trafic_manager" {

@@ -1,4 +1,4 @@
-variable "lacations" {
+variable "locations" {
   type    = list(string)
   default = ["Central US", "West Europe"]
 }
