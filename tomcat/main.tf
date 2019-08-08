@@ -154,6 +154,21 @@ DEPLOY
   ]
 }
 
+resource "azurerm_app_service_slot" "tomcat-app-slots" {
+  count               = length(var.app_names)
+  name                = "${var.app_names[count.index]}-slot"
+  app_service_name    = "${azurerm_app_service.tomcat_apps[count.index].id}"
+  location            = "${azurerm_app_service.tomcat_apps[count.index].location}"
+  resource_group_name = "${azurerm_resource_group.tomcat.name}"
+  app_service_plan_id = "${azurerm_app_service_plan.tomcat_plans[count.index].id}"
+
+  site_config {
+    java_version           = 11
+        java_container         = "Tomcat"
+        java_container_version = "9.0"
+  }
+}
+
 resource "azurerm_traffic_manager_profile" "tomcat_trafic_manager" {
   name                = "tomcat-trafic-manager"
   resource_group_name = "${azurerm_resource_group.tomcat.name}"
