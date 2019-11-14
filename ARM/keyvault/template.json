@@ -76,7 +76,7 @@
         {
         "type": "Microsoft.KeyVault/vaults/secrets",
         "name": "[concat(parameters('name'), '/', parameters('secretName'))]",
-        "apiVersion": "2018-02-14",
+        "apiVersion": "2016-10-01",
         "location": "[parameters('location')]",
         "dependsOn": [
             "[resourceId('Microsoft.KeyVault/vaults', parameters('name'))]"

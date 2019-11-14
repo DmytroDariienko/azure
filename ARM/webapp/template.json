@@ -58,7 +58,7 @@
                 "siteConfig": {
                     "ipSecurityRestrictions": [
                         {
-                            "ipAddress": { "value": "[reference('APIManagemant', '2019-01-01').outputs.publicIPAddresses.value]" },
+                            "ipAddress": "tmp",
                             "action": "Allow",
                             "tag": "Default",
                             "priority": 100,
