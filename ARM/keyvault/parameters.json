@@ -1,0 +1,118 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "value": "ddaritest-keyvault"
+        },
+        "location": {
+            "value": "northcentralus"
+        },
+        "sku": {
+            "value": "Standard"
+        },
+        "accessPolicies": {
+            "value": [
+                {
+                    "objectId": "77477e84-5f0e-4e37-8743-a737bc401900",
+                    "tenantId": "6c51c659-9d52-41af-81f7-dde16380e813",
+                    "permissions": {
+                        "keys": [
+                            "Get",
+                            "List",
+                            "WrapKey",
+                            "UnwrapKey",
+                            "Update",
+                            "Create",
+                            "Backup",
+                            "Delete",
+                            "Import",
+                            "Recover",
+                            "Restore"
+                        ],
+                        "secrets": [
+                            "Get",
+                            "Set",
+                            "List",
+                            "Delete",
+                            "Backup",
+                            "Recover",
+                            "Restore"
+                        ],
+                        "certificates": []
+                    },
+                    "applicationId": null
+                },
+                {
+                    "objectId": "77477e84-5f0e-4e37-8743-a737bc401900",
+                    "tenantId": "6c51c659-9d52-41af-81f7-dde16380e813",
+                    "permissions": {
+                        "keys": [
+                            "Get",
+                            "List",
+                            "Update",
+                            "Create",
+                            "Import",
+                            "Delete",
+                            "Recover",
+                            "Backup",
+                            "Restore"
+                        ],
+                        "secrets": [
+                            "Get",
+                            "List",
+                            "Set",
+                            "Delete",
+                            "Recover",
+                            "Backup",
+                            "Restore"
+                        ],
+                        "certificates": [
+                            "Get",
+                            "List",
+                            "Update",
+                            "Create",
+                            "Import",
+                            "Delete",
+                            "Recover",
+                            "Backup",
+                            "Restore",
+                            "ManageContacts",
+                            "ManageIssuers",
+                            "GetIssuers",
+                            "ListIssuers",
+                            "SetIssuers",
+                            "DeleteIssuers"
+                        ]
+                    }
+                }
+            ]
+        },
+        "tenant": {
+            "value": "6c51c659-9d52-41af-81f7-dde16380e813"
+        },
+        "enabledForDeployment": {
+            "value": false
+        },
+        "enabledForTemplateDeployment": {
+            "value": false
+        },
+        "enabledForDiskEncryption": {
+            "value": false
+        },
+        "networkAcls": {
+            "value": {
+                "defaultAction": "Allow",
+                "bypass": "AzureServices",
+                "ipRules": [],
+                "virtualNetworkRules": []
+            }
+        },
+        "secretName" : {
+            "value": "DBconnection"
+        },
+        "secretValue" : {
+            "value" : "Server=tcp:ddaritest-server.database.windows.net,1433;Initial Catalog=ddaritest-DB;Persist Security Info=False;User ID=ddari;Password=VzmxU16K4uRDAim4JuSY;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        }
+    }
+}
