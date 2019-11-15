@@ -56,6 +56,15 @@
             "properties": {
                 "name": "[parameters('name')]",
                 "siteConfig": {
+                    "ipSecurityRestrictions": [
+                        {
+                            "ipAddress": "tmp",
+                            "action": "Allow",
+                            "tag": "Default",
+                            "priority": 100,
+                            "name": "APIManagemant"
+                        }
+                    ],
                     "appSettings": [
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
