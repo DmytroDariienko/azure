@@ -112,7 +112,7 @@
             "value": "DBconnection"
         },
         "secretValue" : {
-            "value" : "Server=tcp:ddaritest-server.database.windows.net,1433;Initial Catalog=ddaritest-DB;Persist Security Info=False;User ID=ddari;Password=VzmxU16K4uRDAim4JuSY;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+            "value" : ""
         }
     }
 }
