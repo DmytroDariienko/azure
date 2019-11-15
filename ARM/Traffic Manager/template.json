@@ -1,0 +1,85 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string"
+        },
+        "relativeName": {
+            "type": "string"
+        },
+        "trafficRoutingMethod": {
+            "type": "string",
+            "defaultValue": "Performance",
+            "allowedValues": [
+                "Performance",
+                "Weighted",
+                "Priority",
+                "Geographic",
+                "MultiValue",
+                "Subnet"
+            ]
+        },
+        "maxReturn": {
+            "type": "int"
+        },
+        "ExternalEndpointname" : {
+            "type" : "string"
+        },
+        "uniqueDnsName" : {
+            "type" : "string"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-04-01",
+            "type": "Microsoft.Network/trafficmanagerprofiles",
+            "name": "[parameters('name')]",
+            "location": "global",
+            "properties": {
+                "trafficRoutingMethod": "[parameters('trafficRoutingMethod')]",
+                "maxReturn": "[parameters('maxReturn')]",
+                "dnsConfig": {
+                    "relativeName": "[parameters('relativeName')]",
+                    "ttl": "60"
+                },
+                "monitorConfig": {
+                    "protocol": "http",
+                    "port": "80",
+                    "path": "/"
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-04-01",
+            "type": "Microsoft.Network/trafficManagerProfiles",
+            "name": "[parameters('ExternalEndpointname')]",
+            "location": "global",
+            "properties": {
+                "profileStatus": "Enabled",
+                "trafficRoutingMethod": "Performance",
+                "dnsConfig": {
+                    "relativeName": "[parameters('uniqueDnsName')]",
+                    "ttl": 30
+                },
+                "monitorConfig": {
+                    "protocol": "HTTP",
+                    "port": 80,
+                    "path": "/",
+                    "expectedStatusCodeRanges": [{"min":200,"max":202},{"min":407,"max":407}]
+                },
+                "endpoints": [
+                    {
+                        "name": "endpoint1",
+                        "type": "Microsoft.Network/TrafficManagerProfiles/ExternalEndpoints",
+                        "properties": {
+                            "target": "www.microsoft.com",
+                            "endpointStatus": "Enabled",
+                            "endpointLocation": "northeurope"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
