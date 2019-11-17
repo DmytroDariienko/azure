@@ -6,13 +6,13 @@
             "value": "1bc77437-fbfa-4a91-8cd6-ad1626dc5fd4"
         },
         "name": {
-            "value": "ddaritest-API-app"
+            "value": "ddaritest-APIapp"
         },
         "location": {
             "value": "Central US"
         },
         "hostingPlanName": {
-            "value": "ddaritest-API-plan"
+            "value": "ddaritest-APIplan"
         },
         "serverFarmResourceGroup": {
             "value": "test"

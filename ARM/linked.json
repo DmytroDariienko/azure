@@ -1,0 +1,104 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "SQLlinkedTemplate",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/SQL/template.json",
+                    "contentVersion":"1.0.0.0"
+                },
+                "parametersLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/SQL/template.parameters",
+                    "contentVersion":"1.0.0.0"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "keyvaultlinkedTemplate",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/keyvault/template.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parametersLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/keyvault/parameters.json",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "APIManagemantlinkedTemplate",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/APIManagemant/template.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parametersLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/APIManagemant/parameters.json",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "APIapplinkedTemplate",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/APIapp/template.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parametersLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/APIapp/parameters.json",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "webapplinkedTemplate",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/webapp/template.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parametersLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/webapp/parameters.json",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2018-05-01",
+            "name": "storagelinkedTemplate",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/storage/template.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parametersLink": {
+                    "uri":"https://github.com/DmytroDariienko/azure/blob/master/ARM/storage/parameters.json",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
+        }
+    ]
+}

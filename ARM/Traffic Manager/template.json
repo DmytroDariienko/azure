@@ -70,7 +70,7 @@
                 },
                 "endpoints": [
                     {
-                        "name": "endpoint1",
+                        "name": "APIendpoint",
                         "type": "Microsoft.Network/TrafficManagerProfiles/ExternalEndpoints",
                         "properties": {
                             "target": "www.microsoft.com",
