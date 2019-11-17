@@ -44,6 +44,25 @@
     },
     "resources": [
         {
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "kind": "",
+            "tags": {},
+            "dependsOn": [],
+            "properties": {
+                "name": "[parameters('hostingPlanName')]",
+                "workerSize": "[parameters('workerSize')]",
+                "workerSizeId": "[parameters('workerSizeId')]",
+                "numberOfWorkers": "[parameters('numberOfWorkers')]"
+            },
+            "sku": {
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
+            }
+        },
+        {
             "apiVersion": "2016-08-01",
             "name": "[parameters('name')]",
             "type": "Microsoft.Web/sites",
@@ -107,25 +126,7 @@
                 "clientAffinityEnabled": true
             }
         },
-        {
-            "apiVersion": "2018-11-01",
-            "name": "[parameters('hostingPlanName')]",
-            "type": "Microsoft.Web/serverfarms",
-            "location": "[parameters('location')]",
-            "kind": "",
-            "tags": {},
-            "dependsOn": [],
-            "properties": {
-                "name": "[parameters('hostingPlanName')]",
-                "workerSize": "[parameters('workerSize')]",
-                "workerSizeId": "[parameters('workerSizeId')]",
-                "numberOfWorkers": "[parameters('numberOfWorkers')]"
-            },
-            "sku": {
-                "Tier": "[parameters('sku')]",
-                "Name": "[parameters('skuCode')]"
-            }
-        },
+
         {
             "apiVersion": "2015-05-01",
             "name": "ddaritestapp-ins",
