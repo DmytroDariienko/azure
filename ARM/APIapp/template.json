@@ -5,61 +5,61 @@
         "subscriptionId": {
             "type": "string"
         },
-        "name": {
+        "APIname": {
             "type": "string"
         },
-        "location": {
+        "APIlocation": {
             "type": "string"
         },
-        "hostingPlanName": {
+        "APIhostingPlanName": {
             "type": "string"
         },
-        "serverFarmResourceGroup": {
+        "APIserverFarmResourceGroup": {
             "type": "string"
         },
-        "alwaysOn": {
+        "APIalwaysOn": {
             "type": "bool"
         },
-        "sku": {
+        "APIsku": {
             "type": "string"
         },
-        "skuCode": {
+        "APIskuCode": {
             "type": "string"
         },
-        "workerSize": {
+        "APIworkerSize": {
             "type": "string"
         },
-        "workerSizeId": {
+        "APIworkerSizeId": {
             "type": "string"
         },
-        "numberOfWorkers": {
+        "APInumberOfWorkers": {
             "type": "string"
         },
-        "currentStack": {
+        "APIcurrentStack": {
             "type": "string"
         },
-        "netFrameworkVersion": {
+        "APInetFrameworkVersion": {
             "type": "string"
         }
     },
     "resources": [
         {
-            "apiVersion": "2016-08-01",
-            "name": "[parameters('name')]",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('APIname')]",
             "type": "Microsoft.Web/sites",
-            "location": "[parameters('location')]",
+            "location": "[parameters('APIlocation')]",
             "tags": {},
             "dependsOn": [
-                "microsoft.insights/components/ddaritestapp-ins",
-                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+                "microsoft.insights/components/ddaritest-app",
+                "[concat('Microsoft.Web/serverfarms/', parameters('APIhostingPlanName'))]"
             ],
             "properties": {
-                "name": "[parameters('name')]",
+                "name": "[parameters('APIname')]",
                 "siteConfig": {
                     "appSettings": [
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference('microsoft.insights/components/ddaritestapp-ins', '2015-05-01').InstrumentationKey]"
+                            "value": "[reference('microsoft.insights/components/ddaritest-app', '2015-05-01').InstrumentationKey]"
                         },
                         {
                             "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
@@ -97,43 +97,43 @@
                     "metadata": [
                         {
                             "name": "CURRENT_STACK",
-                            "value": "[parameters('currentStack')]"
+                            "value": "[parameters('APIcurrentStack')]"
                         }
                     ],
-                    "netFrameworkVersion": "[parameters('netFrameworkVersion')]",
-                    "alwaysOn": "[parameters('alwaysOn')]"
+                    "netFrameworkVersion": "[parameters('APInetFrameworkVersion')]",
+                    "alwaysOn": "[parameters('APIalwaysOn')]"
                 },
-                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('APIserverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('APIhostingPlanName'))]",
                 "clientAffinityEnabled": true
             }
         },
         {
             "apiVersion": "2018-11-01",
-            "name": "[parameters('hostingPlanName')]",
+            "name": "[parameters('APIhostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
-            "location": "[parameters('location')]",
+            "location": "[parameters('APIlocation')]",
             "kind": "",
             "tags": {},
             "dependsOn": [],
             "properties": {
-                "name": "[parameters('hostingPlanName')]",
-                "workerSize": "[parameters('workerSize')]",
-                "workerSizeId": "[parameters('workerSizeId')]",
-                "numberOfWorkers": "[parameters('numberOfWorkers')]"
+                "name": "[parameters('APIhostingPlanName')]",
+                "workerSize": "[parameters('APIworkerSize')]",
+                "workerSizeId": "[parameters('APIworkerSizeId')]",
+                "numberOfWorkers": "[parameters('APInumberOfWorkers')]"
             },
             "sku": {
-                "Tier": "[parameters('sku')]",
-                "Name": "[parameters('skuCode')]"
+                "Tier": "[parameters('APIsku')]",
+                "Name": "[parameters('APIskuCode')]"
             }
         },
         {
             "apiVersion": "2015-05-01",
-            "name": "ddaritestapp-API-ins",
+            "name": "ddaritest-app",
             "type": "microsoft.insights/components",
             "location": "centralus",
             "tags": {},
             "properties": {
-                "ApplicationId": "[parameters('name')]",
+                "ApplicationId": "[parameters('APIname')]",
                 "Request_Source": "IbizaWebAppExtensionCreate"
             }
         }

@@ -5,40 +5,40 @@
         "subscriptionId": {
             "value": "1bc77437-fbfa-4a91-8cd6-ad1626dc5fd4"
         },
-        "name": {
+        "APIname": {
             "value": "ddaritest-APIapp"
         },
-        "location": {
+        "APIlocation": {
             "value": "Central US"
         },
-        "hostingPlanName": {
+        "APIhostingPlanName": {
             "value": "ddaritest-APIplan"
         },
-        "serverFarmResourceGroup": {
+        "APIserverFarmResourceGroup": {
             "value": "test"
         },
-        "alwaysOn": {
+        "APIalwaysOn": {
             "value": false
         },
-        "sku": {
+        "APIsku": {
             "value": "Basic"
         },
-        "skuCode": {
+        "APIskuCode": {
             "value": "B1"
         },
-        "workerSize": {
+        "APIworkerSize": {
             "value": "0"
         },
-        "workerSizeId": {
+        "APIworkerSizeId": {
             "value": "0"
         },
-        "numberOfWorkers": {
+        "APInumberOfWorkers": {
             "value": "1"
         },
-        "currentStack": {
+        "APIcurrentStack": {
             "value": "dotnet"
         },
-        "netFrameworkVersion": {
+        "APInetFrameworkVersion": {
             "value": "v4.0"
         }
     }
