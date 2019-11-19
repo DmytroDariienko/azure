@@ -20,17 +20,11 @@
         "capacity": {
             "value": 1
         },
-        "subscriptionId": {
-            "value": "1bc77437-fbfa-4a91-8cd6-ad1626dc5fd4"
-        },
         "APIname": {
-            "value": "ddaritest-APIapp"
+            "value": "ddaritest-api-app"
         },
         "APIhostingPlanName": {
-            "value": "ddaritest-APIplan"
-        },
-        "APIserverFarmResourceGroup": {
-            "value": "test"
+            "value": "ddaritest-api-plan"
         },
         "APIalwaysOn": {
             "value": false
@@ -55,6 +49,24 @@
         },
         "APInetFrameworkVersion": {
             "value": "v4.0"
+        },
+        "TMname": {
+            "value": "ddaritest-TM"
+        },
+        "TMrelativeName": {
+            "value": "ddaritest-TM"
+        },
+        "TMtrafficRoutingMethod": {
+            "value": "Performance"
+        },
+        "TMmaxReturn": {
+            "value": 0
+        },
+        "TMExternalEndpointname": {
+            "value": "API"
+        },
+        "TMuniqueDnsName": {
+            "value": "ddaritest-apimanagemant.azure-api.net"
         }
     }
 }

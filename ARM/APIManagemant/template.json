@@ -20,16 +20,10 @@
         "capacity": {
             "type": "int"
         },
-        "subscriptionId": {
-            "type": "string"
-        },
         "APIname": {
             "type": "string"
         },
         "APIhostingPlanName": {
-            "type": "string"
-        },
-        "APIserverFarmResourceGroup": {
             "type": "string"
         },
         "APIalwaysOn": {
@@ -55,6 +49,33 @@
         },
         "APInetFrameworkVersion": {
             "type": "string"
+        },
+        "TMname": {
+            "type": "string"
+        },
+        "TMrelativeName": {
+            "type": "string"
+        },
+        "TMtrafficRoutingMethod": {
+            "type": "string",
+            "defaultValue": "Performance",
+            "allowedValues": [
+                "Performance",
+                "Weighted",
+                "Priority",
+                "Geographic",
+                "MultiValue",
+                "Subnet"
+            ]
+        },
+        "TMmaxReturn": {
+            "type": "int"
+        },
+        "TMExternalEndpointname" : {
+            "type" : "string"
+        },
+        "TMuniqueDnsName" : {
+            "type" : "string"
         }
     },
     "resources": [
@@ -73,32 +94,50 @@
             }
         },
         {
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2018-02-01",
+            "name": "[parameters('APIhostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "kind": "",
+            "tags": {},
+            "dependsOn": [],
+            "properties": {
+                "name": "[parameters('APIhostingPlanName')]",
+                "workerSize": "[parameters('APIworkerSize')]",
+                "workerSizeId": "[parameters('APIworkerSizeId')]",
+                "numberOfWorkers": "[parameters('APInumberOfWorkers')]"
+            },
+            "sku": {
+                "Tier": "[parameters('APIsku')]",
+                "Name": "[parameters('APIskuCode')]"
+            }
+        },
+        {
+            "apiVersion": "2016-08-01",
             "name": "[parameters('APIname')]",
             "type": "Microsoft.Web/sites",
             "location": "[parameters('location')]",
             "tags": {},
             "dependsOn": [
-                "[concat('microsoft.insights/components/ddaritest-API-ins')]",
-                "[concat('Microsoft.Web/serverfarms/', parameters('APIhostingPlanName'))]",
-                "[concat('Microsoft.ApiManagement/service/', parameters('name'))]"
+                "microsoft.insights/components/ddaritestapp-ins",
+                "[concat('Microsoft.Web/serverfarms/', parameters('APIhostingPlanName'))]"
             ],
             "properties": {
                 "name": "[parameters('APIname')]",
                 "siteConfig": {
                     "ipSecurityRestrictions": [
                         {
-                            "ipAddress": "[reference(parameters('name')).publicIPAddresses]",
+                            "ipAddress": "[reference(parameters('name')).publicIPAddresses[0]]",
                             "action": "Allow",
                             "tag": "Default",
                             "priority": 100,
-                            "name": "IP example rule"
+                            "name": "APIManagemant"
                         }
                     ],
                     "appSettings": [
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            "value": "[reference('microsoft.insights/components/ddaritest-API-ins', '2015-05-01').InstrumentationKey]"
+                            "value": "[reference('microsoft.insights/components/ddaritestapp-ins', '2015-05-01').InstrumentationKey]"
                         },
                         {
                             "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
@@ -142,32 +181,13 @@
                     "netFrameworkVersion": "[parameters('APInetFrameworkVersion')]",
                     "alwaysOn": "[parameters('APIalwaysOn')]"
                 },
-                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('APIserverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('APIhostingPlanName'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('APIhostingPlanName'))]",
                 "clientAffinityEnabled": true
             }
         },
         {
-            "apiVersion": "2018-11-01",
-            "name": "[parameters('APIhostingPlanName')]",
-            "type": "Microsoft.Web/serverfarms",
-            "location": "[parameters('location')]",
-            "kind": "",
-            "tags": {},
-            "dependsOn": [],
-            "properties": {
-                "name": "[parameters('APIhostingPlanName')]",
-                "workerSize": "[parameters('APIworkerSize')]",
-                "workerSizeId": "[parameters('APIworkerSizeId')]",
-                "numberOfWorkers": "[parameters('APInumberOfWorkers')]"
-            },
-            "sku": {
-                "Tier": "[parameters('APIsku')]",
-                "Name": "[parameters('APIskuCode')]"
-            }
-        },
-        {
             "apiVersion": "2015-05-01",
-            "name": "ddaritest-API-ins",
+            "name": "ddaritestapp-ins",
             "type": "microsoft.insights/components",
             "location": "centralus",
             "tags": {},
@@ -175,12 +195,36 @@
                 "ApplicationId": "[parameters('APIname')]",
                 "Request_Source": "IbizaWebAppExtensionCreate"
             }
+        },
+        {
+            "apiVersion": "2018-04-01",
+            "type": "Microsoft.Network/trafficmanagerprofiles",
+            "name": "[parameters('TMname')]",
+            "location": "global",
+            "properties": {
+                "trafficRoutingMethod": "[parameters('TMtrafficRoutingMethod')]",
+                "maxReturn": "[parameters('TMmaxReturn')]",
+                "dnsConfig": {
+                    "relativeName": "[parameters('TMrelativeName')]",
+                    "ttl": "60"
+                },
+                "monitorConfig": {
+                    "protocol": "http",
+                    "port": "80",
+                    "path": "/"
+                },
+                "endpoints": [
+                    {
+                        "name": "[parameters('TMExternalEndpointname')]",
+                        "type": "Microsoft.Network/TrafficManagerProfiles/ExternalEndpoints",
+                        "properties": {
+                            "target": "[parameters('TMuniqueDnsName')]",
+                            "endpointStatus": "Enabled",
+                            "endpointLocation": "northeurope"
+                        }
+                    }
+                ]
+            }
         }
-    ],
-    "outputs" : {
-        "publicIPAddresses": {
-            "type" : "Array",
-            "value" : "[reference(parameters('name')).publicIPAddresses]"
-        }
-    }
+    ]
 }

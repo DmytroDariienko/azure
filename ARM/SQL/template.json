@@ -2,6 +2,18 @@
     "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "accountType": {
+            "type": "string"
+        },
+        "kind": {
+            "type": "string"
+        },
+        "accessTier": {
+            "type": "string"
+        },
+        "supportsHttpsTrafficOnly": {
+            "type": "bool"
+        },
         "administratorLogin": {
             "type": "string"
         },
@@ -101,10 +113,6 @@
             "type": "string",
             "defaultValue": ""
         },
-        "privateEndpointSubnetId": {
-            "type": "string",
-            "defaultValue": ""
-        },
         "privateLinkServiceName": {
             "type": "string",
             "defaultValue": ""
@@ -168,16 +176,20 @@
     },
     "resources": [
         {
-            "condition": "[parameters('enableVA')]",
-            "apiVersion": "2016-01-01",
-            "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('storageName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
             "location": "[parameters('location')]",
-            "sku": {
-                "name": "Standard_LRS"
+            "properties": {
+                "accessTier": "[parameters('accessTier')]",
+                "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]"
             },
-            "kind": "Storage",
-            "properties": {}
+            "dependsOn": [],
+            "sku": {
+                "name": "[parameters('accountType')]"
+            },
+            "kind": "[parameters('kind')]",
+            "tags": {}
         },
         {
             "apiVersion": "2015-05-01-preview",

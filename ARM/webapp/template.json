@@ -2,9 +2,6 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "subscriptionId": {
-            "type": "string"
-        },
         "name": {
             "type": "string"
         },
@@ -12,9 +9,6 @@
             "type": "string"
         },
         "hostingPlanName": {
-            "type": "string"
-        },
-        "serverFarmResourceGroup": {
             "type": "string"
         },
         "alwaysOn": {
@@ -44,7 +38,7 @@
     },
     "resources": [
         {
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2018-02-01",
             "name": "[parameters('hostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
             "location": "[parameters('location')]",
@@ -122,11 +116,10 @@
                     "netFrameworkVersion": "[parameters('netFrameworkVersion')]",
                     "alwaysOn": "[parameters('alwaysOn')]"
                 },
-                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
                 "clientAffinityEnabled": true
             }
         },
-
         {
             "apiVersion": "2015-05-01",
             "name": "ddaritestapp-ins",

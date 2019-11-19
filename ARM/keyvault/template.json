@@ -48,9 +48,6 @@
         },
         "secretName" : {
             "type": "string"
-        },
-        "secretValue" : {
-            "type" : "string"
         }
     },
     "resources": [
@@ -74,16 +71,20 @@
             "tags": {}
         },
         {
-        "type": "Microsoft.KeyVault/vaults/secrets",
-        "name": "[concat(parameters('name'), '/', parameters('secretName'))]",
-        "apiVersion": "2016-10-01",
-        "location": "[parameters('location')]",
-        "dependsOn": [
-            "[resourceId('Microsoft.KeyVault/vaults', parameters('name'))]"
-        ],
-        "properties": {
-            "value": "[parameters('secretValue')]"
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "name": "[concat(parameters('name'), '/', parameters('secretName'))]",
+            "apiVersion": "2016-10-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('name'))]"
+            ],
+            "properties": {
+                "value": "[concat('=tcp:ddaritest-server.database.windows.net,1433;Initial Catalog=ddaritest-DB;Persist Security Info=False;User ID=ddari;Password=', variables('administratorLoginPassword'), ';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]"
+            }
         }
-        }
-    ]
+        
+    ],
+    "variables": {
+        "administratorLoginPassword" : "VzmxU16K4uRDAim4JuSY"
+    }
 }

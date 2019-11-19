@@ -110,9 +110,6 @@
         },
         "secretName" : {
             "value": "DBconnection"
-        },
-        "secretValue" : {
-            "value" : ""
         }
     }
 }
